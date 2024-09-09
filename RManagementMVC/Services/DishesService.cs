@@ -64,6 +64,7 @@ public static class DishesService /*: IDishesService*/
 			Id = id,
 			Name = dish.Name,
 			Description = dish.Description,
+			Price = dish.Price,
 			IsAvailable = dish.IsAvailable
 		};
 
