@@ -73,5 +73,17 @@ public static class DishesService /*: IDishesService*/
 		return id;
 	}
 
+	public static void Delete(int id)
+	{
+		var dish = _dishes.FirstOrDefault(d => d.Id == id);
+
+		if (dish != null)
+		{
+			_dishes.Remove(dish);
+		}
+
+		return;
+	}
+
 
 }

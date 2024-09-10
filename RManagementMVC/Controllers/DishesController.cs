@@ -7,6 +7,10 @@ namespace RManagementMVC.Controllers;
 public class DishesController/*(IDishesService dishesService)*/ : Controller
 {
 
+	private const string _createString = "create";
+	private const string _editString = "edit";
+
+
 	public IActionResult Index()
 	{
 		var dishes = DishesService.GetAll();
@@ -16,6 +20,8 @@ public class DishesController/*(IDishesService dishesService)*/ : Controller
 
 	public IActionResult Edit(int id)
 	{
+		ViewBag.Action = _editString;
+
 		var dish = DishesService.GetByID(id);
 		return View(dish);
 	}
@@ -24,6 +30,7 @@ public class DishesController/*(IDishesService dishesService)*/ : Controller
 	[HttpPost]
 	public IActionResult Edit(Dish dish)
 	{
+
 		if (ModelState.IsValid)
 		{
 			DishesService.UpdateDish(dish);
@@ -36,6 +43,7 @@ public class DishesController/*(IDishesService dishesService)*/ : Controller
 
 	public IActionResult Create()
 	{
+		ViewBag.Action = _createString;
 
 		return View();
 	}
@@ -44,6 +52,8 @@ public class DishesController/*(IDishesService dishesService)*/ : Controller
 	[HttpPost]
 	public IActionResult Create(Dish dish)
 	{
+		ViewBag.Action = _createString;
+
 		if (ModelState.IsValid)
 		{
 			DishesService.Create(dish);
@@ -52,5 +62,13 @@ public class DishesController/*(IDishesService dishesService)*/ : Controller
 
 		return View(dish);
 	}
+
+
+	public IActionResult Delete(int id)
+	{
+		DishesService.Delete(id);
+		return RedirectToAction(nameof(Index));
+	}
+
 
 }
