@@ -1,55 +1,9 @@
 ﻿@model Dish
 
 
+
 <h3 class="mb-3">Create dish</h3>
 
+<partial name="_Dish" model="Model" />
 
 
-<form method="post" asp-controller="dishes" asp-action="create">
-	<div class="text-danger" asp-validation-summary="All"></div>
-	<div class="row mb-3">
-		<div class="col-2">
-			<label asp-for="Name" class="col-form-label"></label>
-		</div>
-		<div class="col-6">
-			<input type="text" asp-for=Name class="form-control" />
-		</div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-2">
-			<label asp-for="Description" class="col-form-label"></label>
-		</div>
-		<div class="col-6">
-			<input type="text" asp-for=Description class="form-control" />
-		</div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-2">
-			<label asp-for="Price" class="col-form-label"></label>
-		</div>
-		<div class="col-6">
-			<input type="text" asp-for=Price class="form-control" />
-		</div>
-	</div>
-	<div class="row mb-3">
-		<div class="col-2">
-			<label asp-for="IsAvailable" class="col-form-label">Availability</label>
-		</div>
-		<div class="col-6">
-			<select asp-for="IsAvailable" class="form-select form-select-sm" aria-label="Availability status" required>
-				<option value="">-- Select Availability --</option>
-				<option value="true">&#x1F7E2; Available</option>
-				<option value="false">&#x1F534; Not Available</option>
-			</select>
-			<div class="form-text">Choose the current availability status</div>
-			<div class="invalid-feedback">Please select an availability status.</div>
-		</div>
-		<div class="row mb-3">
-			<div class="col-2">
-				<input type="submit" class="btn btn-primary" value="Create	" />
-			</div>
-			<div class="col-6">
-			</div>
-		</div>
-	</div>
-</form>	 

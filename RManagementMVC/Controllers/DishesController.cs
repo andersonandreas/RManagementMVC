@@ -52,7 +52,6 @@ public class DishesController/*(IDishesService dishesService)*/ : Controller
 	[HttpPost]
 	public IActionResult Create(Dish dish)
 	{
-		ViewBag.Action = _createString;
 
 		if (ModelState.IsValid)
 		{
