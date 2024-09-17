@@ -1,0 +1,116 @@
+﻿@model AdminPanelViewModel
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<h1>Admin Panel</h1>
+
+@* <h2>Reservations</h2>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>At</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Quantity</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var reservation in Model.Reservations)
+		{
+			<tr>
+				<td>@reservation.At</td>
+				<td>@reservation.Name</td>
+				<td>@reservation.Email</td>
+				<td>@reservation.Quantity</td>
+				<td>
+					<a class="btn btn-link"
+					   asp-controller="Reservations"
+					   asp-action="Edit"
+					   asp-route-id="@reservation.Id">
+						Edit
+					</a>
+				</td>
+				<td>
+					<a class="btn btn-link"
+					   asp-controller="Reservations"
+					   asp-action="delete"
+					   asp-route-id="@reservation.Id"
+					   onclick="return doubleCheckBeforeDelete()">
+						Delete
+					</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+ *@
+
+
+<h2>Dishes</h2>
+<table class="table table-striped mt-3">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Price</th>
+			<th>Available</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var dish in Model.Dishes)
+		{
+			<tr>
+				<td>@dish.Name</td>
+				<td>@dish.Description</td>
+				<td>@dish.Price.ToString("c")</td>
+				<td>@dish.IsAvailable</td>
+				<td>
+					<a class="btn btn-link"
+					   asp-controller="Dishes"
+					   asp-action="Edit"
+					   asp-route-id="@dish.Id">
+						Edit
+					</a>
+				</td>
+				<td>
+					<a class="btn btn-link"
+					   asp-controller="Dishes"
+					   asp-action="delete"
+					   asp-route-id="@dish.Id"
+					   onclick="return doubleCheckBeforeDelete()">
+						Delete
+					</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+	
+
+<a asp-controller="dishes" asp-action="create" class="btn btn-primary mt-2"> Add</a>
+
+<a asp-action="Logout" class="btn btn-secondary">Logout</a>
+
+
+
+
+
+
+
+
+
+@section Scripts {
+
+	<script>
+		function doubleCheckBeforeDelete() {
+			return confirm("Delete dish, are you sure?")
+		}
+
+	</script>
+
+}

@@ -1,10 +1,10 @@
 ﻿using RManagementMVC.Models;
 
-namespace RManagementMVC.Services.Interfaces
+namespace RManagementMVC.Services.Restaurant.Interfaces
 {
 	public interface IDishesService
 	{
-		IReadOnlyList<Dish> GetAll();
+		IEnumerable<Dish> GetAll();
 		Dish? GetByID(int id);
 		//void UpdateDish(DishDto dishDto);
 		//int Create(DishDto dishDto);

@@ -1,6 +1,6 @@
 ﻿using RManagementMVC.Models;
 
-namespace RManagementMVC.Services;
+namespace RManagementMVC.Services.Restaurant;
 
 public static class DishesService /*: IDishesService*/
 {
@@ -28,7 +28,7 @@ public static class DishesService /*: IDishesService*/
 
 
 
-	public static IReadOnlyList<Dish> GetAll()
+	public static IEnumerable<Dish> GetAll()
 	{
 		return _dishes.ToList();
 	}

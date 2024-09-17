@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RManagementMVC.Models;
-using RManagementMVC.Services;
+using RManagementMVC.Services.Restaurant;
 
 namespace RManagementMVC.Controllers;
 
