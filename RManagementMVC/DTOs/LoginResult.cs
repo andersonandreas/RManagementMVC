@@ -2,9 +2,8 @@
 
 public record LoginResult
 {
-    public bool Succes { get; set; }
-    public string Message { get; set; } = default!;
-    public string Token { get; set; } = default!;
-    public string RefreshToken { get; set; } = default!;
+	public bool Success { get; set; }
+	public string AccessToken { get; set; } = default!;
+	public string RefreshToken { get; set; } = default!;
 
 }

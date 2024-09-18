@@ -6,60 +6,32 @@ public class TokenService(IHttpContextAccessor httpContextAccessor) : ITokenServ
 {
 
 	private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+	private const string _accessTokenKey = "AccessToken";
+	private const string _refreshTokenKey = "RefreshToken";
 
-	private const string _tokenKey = "token";
-	private const string _refreshToken = "refreshToken";
+
+	public string? GetAccessToken() => _httpContextAccessor.HttpContext?.Request.Cookies[_accessTokenKey];
+	public string? GetRefreshToken() => _httpContextAccessor.HttpContext?.Request.Cookies[_refreshTokenKey];
 
 
-	public string? GetToken()
+	public void SetTokens(string accessToken, string refreshToken)
 	{
-		return _httpContextAccessor.HttpContext?.Request.Cookies[_tokenKey];
-	}
-
-
-	public string? GetRefreshToken()
-	{
-		return _httpContextAccessor?.HttpContext?.Request.Cookies[_refreshToken];
-	}
-
-
-	public void SetToken(string token)
-	{
-		var cookieOpts = new CookieOptions
+		var cookieOptions = new CookieOptions
 		{
 			HttpOnly = true,
-			Expires = DateTime.UtcNow.AddDays(2),
 			Secure = true,
 			SameSite = SameSiteMode.Strict
 		};
 
-		_httpContextAccessor?.HttpContext?.Response.Cookies.Append(_tokenKey, token, cookieOpts);
+		_httpContextAccessor.HttpContext?.Response.Cookies.Append(_accessTokenKey, accessToken, cookieOptions);
+		_httpContextAccessor.HttpContext?.Response.Cookies.Append(_refreshTokenKey, refreshToken, cookieOptions);
 	}
 
 
-	public void SetRefreshToken(string refreshToken)
+	public void ClearTokens()
 	{
-		var cookieOpts = new CookieOptions
-		{
-			HttpOnly = true,
-			Expires = DateTime.UtcNow.AddDays(10),
-			Secure = true,
-			SameSite = SameSiteMode.Strict
-		};
-
-		_httpContextAccessor?.HttpContext?.Response.Cookies.Append(_refreshToken, refreshToken, cookieOpts);
-	}
-
-
-	public void RemoveToken()
-	{
-		_httpContextAccessor?.HttpContext?.Response.Cookies.Delete(_tokenKey);
-	}
-
-
-	public void RemoveRefreshToken()
-	{
-		_httpContextAccessor?.HttpContext?.Response.Cookies.Delete(_refreshToken);
+		_httpContextAccessor.HttpContext?.Response.Cookies.Delete(_accessTokenKey);
+		_httpContextAccessor.HttpContext?.Response.Cookies.Delete(_refreshTokenKey);
 	}
 
 

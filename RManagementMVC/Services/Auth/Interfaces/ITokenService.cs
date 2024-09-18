@@ -2,11 +2,9 @@
 {
     public interface ITokenService
     {
+        void ClearTokens();
+        string? GetAccessToken();
         string? GetRefreshToken();
-        string? GetToken();
-        void RemoveRefreshToken();
-        void RemoveToken();
-        void SetRefreshToken(string refreshToken);
-        void SetToken(string token);
+        void SetTokens(string accessToken, string refreshToken);
     }
 }

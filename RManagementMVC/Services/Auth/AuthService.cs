@@ -1,86 +1,57 @@
-﻿using RManagementMVC.Services.Auth.Interfaces;
+﻿using RManagementMVC.Models.ViewModels;
+using RManagementMVC.Services.Auth.Interfaces;
 
 namespace RManagementMVC.Services.Auth;
 
 public class AuthService(
 	ITokenService tokenService,
-	IJwtService jwtService,
-	IAuthApiClient authApiClient) : IAuthService
+	IAuthApiClient authApiClient,
+	AdminStateService adminStateService) : IAuthService
 {
 
-	private const int _tokenRefreshMinutes = 5;
+	private readonly ITokenService _tokenService = tokenService;
+	private readonly IAuthApiClient _authApiClient = authApiClient;
+	private readonly AdminStateService _adminStateService = adminStateService;
 
 
-	public bool IsAuthenticated()
+
+	public async Task<bool> LoginAsync(LoginViewModel loginViewModel)
 	{
-		return !string.IsNullOrEmpty(tokenService.GetToken());
+		var result = await _authApiClient.LoginAsync(loginViewModel);
+		if (result.Success)
+		{
+			_tokenService.SetTokens(result.AccessToken, result.RefreshToken);
+
+			var isAdmin = await _authApiClient.ValidateAdminTokenAsync(result.AccessToken);
+			_adminStateService.SetAdminLoggedIn(isAdmin);
+
+			return true;
+		}
+
+		return false;
 	}
 
 
 	public void Logout()
 	{
-		tokenService.RemoveToken();
-		tokenService.RemoveRefreshToken();
+		_tokenService.ClearTokens();
+		_adminStateService.SetAdminLoggedIn(false);
 	}
 
 
-	public bool IsAdmin()
-	{
-		return jwtService.IsAdmin(tokenService.GetToken());
-	}
-
-
-	public async Task<bool> EnsureValidTokenAsync()
-	{
-		var token = tokenService.GetToken();
-
-		if (string.IsNullOrEmpty(token))
-		{
-			return false;
-		}
-
-		if (jwtService.IsTokenExpiring(token, _tokenRefreshMinutes))
-		{
-			return true;
-		}
-
-
-		return await RefreshTokenAsync();
-	}
-
-
-	private async Task<bool> RefreshTokenAsync()
-	{
-
-		var refreshToken = tokenService.GetRefreshToken();
-
-		if (string.IsNullOrEmpty(refreshToken))
-		{
-			return false;
-		}
-
-		var result = await authApiClient.RefreshTokenAsync(refreshToken);
-
-		if (!result.Succes || string.IsNullOrEmpty(result.Token))
-		{
-			return false;
-		}
-
-		tokenService.SetToken(result.Token);
-		tokenService.SetRefreshToken(refreshToken);
-
-		return true;
-	}
-
-
-
-
-
-
-
-
-
-
-
+	public bool IsAuthenticated() => !string.IsNullOrEmpty(_tokenService.GetAccessToken());
+	public bool IsAdmin() => _adminStateService.IsAdminLoggedIn();
+	public bool EnsureValidToken() => !string.IsNullOrEmpty(_tokenService.GetAccessToken());
 
 }
+
+
+
+
+
+
+
+
+
+
+

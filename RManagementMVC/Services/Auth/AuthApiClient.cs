@@ -1,23 +1,21 @@
 ﻿using RManagementMVC.DTOs;
 using RManagementMVC.Models.ViewModels;
 using RManagementMVC.Services.Auth.Interfaces;
+using System.Net.Http.Headers;
 
 namespace RManagementMVC.Services.Auth;
 
-public class AuthApiClient(HttpClient httpClient, IConfiguration configuration) : IAuthApiClient
+public class AuthApiClient(HttpClient httpClient, ITokenService tokenService) : IAuthApiClient
 {
 
 	private readonly HttpClient _httpClient = httpClient;
-
-	private string _baseUrl = configuration["ApiSettings:BaseUrl"]
-		?? throw new ApplicationException("Check baseUrl in appsettings");
+	private readonly ITokenService _tokenService = tokenService;
 
 
 
 	public async Task<LoginResult> LoginAsync(LoginViewModel loginViewModel)
 	{
-		var response = await _httpClient.PatchAsJsonAsync(
-			$"{_baseUrl}/api/identity/login", loginViewModel);
+		var response = await _httpClient.PostAsJsonAsync("api/identity/login", loginViewModel);
 
 		if (response.IsSuccessStatusCode)
 		{
@@ -25,41 +23,23 @@ public class AuthApiClient(HttpClient httpClient, IConfiguration configuration) 
 
 			if (result != null)
 			{
-				result.Succes = true;
+				result.Success = true;
 				return result;
 			}
 		}
 
-		return new LoginResult
-		{
-			Succes = false,
-			Message = $"Login failed with status code: {response.StatusCode}"
-		};
+		return new LoginResult { Success = false };
 	}
 
 
-	public async Task<LoginResult> RefreshTokenAsync(string refreshToken)
+	public async Task<bool> ValidateAdminTokenAsync(string token)
 	{
+		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+		var response = await _httpClient.GetAsync("api/identity/validateAdmin");
 
-		var response = await _httpClient.PostAsJsonAsync(
-			$"{_baseUrl}/api/identity/refresh", new { RefreshToken = refreshToken });
-
-		if (response.IsSuccessStatusCode)
-		{
-			var result = await response.Content.ReadFromJsonAsync<LoginResult>();
-			if (result != null)
-			{
-				result.Succes = true;
-				return result;
-			}
-		}
-
-		return new LoginResult
-		{
-			Succes = false,
-			Message = $"Token refresh failed with status code: {response.StatusCode}"
-		};
+		return response.IsSuccessStatusCode;
 	}
+
 
 
 }

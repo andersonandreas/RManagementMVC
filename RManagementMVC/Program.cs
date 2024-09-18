@@ -7,15 +7,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IAuthApiClient, AuthApiClient>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddSingleton<AdminStateService>();
 
-builder.Services.AddHttpClient();
-builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpClient<IAuthApiClient, AuthApiClient>(client =>
+{
+	var baseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? null;
+
+	if (baseUrl != null)
+	{
+		client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
+	}
+
+});
+
 
 //builder.Services.AddScoped<IDishesService, DishesService>();
 

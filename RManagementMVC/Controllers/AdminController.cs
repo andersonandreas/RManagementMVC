@@ -5,70 +5,34 @@ using RManagementMVC.Services.Restaurant;
 
 namespace RManagementMVC.Controllers;
 
-public class AdminController(
-	IAuthService authService,
-	IAuthApiClient authApiClient) : Controller
+public class AdminController(IAuthService authService, IAuthApiClient authApiClient) : Controller
 {
 
+	private readonly IAuthService _authService = authService;
+	private readonly IAuthApiClient _authApiClient = authApiClient;
 
-	public IActionResult Login()
+
+	public IActionResult Panel()
 	{
-
-		if (authService.IsAuthenticated() && authService.IsAdmin())
+		if (!_authService.IsAuthenticated() || !_authService.IsAdmin())
 		{
-			return RedirectToAction(nameof(Panel));
+			return RedirectToAction("Login", "Account");
 		}
 
-		return View();
-	}
-
-
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Login(LoginViewModel loginViewModel)
-	{
-		if (ModelState.IsValid)
+		if (!_authService.EnsureValidToken())
 		{
-			var result = await authApiClient.LoginAsync(loginViewModel);
-
-			if (result.Succes && authService.IsAdmin())
-			{
-				return RedirectToAction(nameof(Panel));
-			}
-
-			ModelState.AddModelError(string.Empty, "Invalid login attempt or not an admin.");
+			return RedirectToAction("Login", "Account");
 		}
-
-		return View();
-	}
-
-
-	public async Task<IActionResult> Panel()
-	{
-
-		if (authService.IsAuthenticated() && authService.IsAdmin())
-		{
-			return RedirectToAction(nameof(Login));
-		}
-
-		await authService.EnsureValidTokenAsync();
 
 		var viewModel = new AdminPanelViewModel
 		{
+			//Dishes = await _authApiClient.GetDishesAsync(),
+			//Reservations = await _authApiClient.GetReservationsAsync() 
 			Dishes = DishesService.GetAll(),
 			Reservations = []
-
 		};
 
-
 		return View(viewModel);
-	}
-
-
-	public IActionResult Logout()
-	{
-		authService.Logout();
-		return RedirectToAction("Index", "Home");
 	}
 
 }

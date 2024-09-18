@@ -6,6 +6,6 @@ namespace RManagementMVC.Services.Auth.Interfaces
 	public interface IAuthApiClient
 	{
 		Task<LoginResult> LoginAsync(LoginViewModel loginViewModel);
-		Task<LoginResult> RefreshTokenAsync(string refreshToken);
+		Task<bool> ValidateAdminTokenAsync(string token);
 	}
 }
