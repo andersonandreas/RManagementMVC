@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RManagementMVC.Models.ViewModels;
 using RManagementMVC.Services.Auth.Interfaces;
-using RManagementMVC.Services.Restaurant;
+using RManagementMVC.Services.Restaurant.Interfaces;
 
 namespace RManagementMVC.Controllers;
 
-public class AdminController(IAuthService authService, IAuthApiClient authApiClient) : Controller
+public class AdminController(
+	IAuthService authService,
+	IAuthApiClient authApiClient,
+	IDishesService dishesService) : Controller
 {
 
+	private readonly IDishesService _dishesService = dishesService;
 	private readonly IAuthService _authService = authService;
 	private readonly IAuthApiClient _authApiClient = authApiClient;
 
 
-	public IActionResult Panel()
+	public async Task<IActionResult> Panel()
 	{
 		if (!_authService.IsAuthenticated() || !_authService.IsAdmin())
 		{
@@ -26,9 +30,7 @@ public class AdminController(IAuthService authService, IAuthApiClient authApiCli
 
 		var viewModel = new AdminPanelViewModel
 		{
-			//Dishes = await _authApiClient.GetDishesAsync(),
-			//Reservations = await _authApiClient.GetReservationsAsync() 
-			Dishes = DishesService.GetAll(),
+			Dishes = await _dishesService.GetAllAsync(),
 			Reservations = []
 		};
 

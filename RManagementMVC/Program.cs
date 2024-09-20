@@ -1,3 +1,4 @@
+using RManagementMVC.Options;
 using RManagementMVC.Services.Auth;
 using RManagementMVC.Services.Auth.Interfaces;
 using RManagementMVC.Services.Restaurant;
@@ -9,26 +10,31 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.Configure<RestaurantOptions>(
+	builder.Configuration.GetSection(RestaurantOptions.SectionName));
+
+
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IAuthApiClient, AuthApiClient>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<AdminStateService>();
+builder.Services.AddScoped<IDishesService, DishesService>();
 
 
-builder.Services.AddHttpClient<IAuthApiClient, AuthApiClient>(client =>
+
+
+builder.Services.AddHttpClient("RestaurantApiClient", client =>
 {
-	var baseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? null;
+	var baseUrl = builder.Configuration["ApiSettings:BaseUrl"] ??
+		throw new ApplicationException("Missing API settings in appsettings");
 
-	if (baseUrl != null)
-	{
-		client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
-	}
+	client.BaseAddress = new Uri(baseUrl);
 
 });
 
 
-//builder.Services.AddScoped<IDishesService, DishesService>();
+
 
 var app = builder.Build();
 

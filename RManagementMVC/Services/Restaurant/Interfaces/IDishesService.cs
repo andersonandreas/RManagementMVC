@@ -4,13 +4,8 @@ namespace RManagementMVC.Services.Restaurant.Interfaces
 {
 	public interface IDishesService
 	{
-		IEnumerable<Dish> GetAll();
-		Dish? GetByID(int id);
-		//void UpdateDish(DishDto dishDto);
-		//int Create(DishDto dishDto);
-
-		void UpdateDish(Dish dish);
-		int Create(Dish dish);
-
+		Task<IEnumerable<Dish>> GetAllAsync();
+		Task<Dish?> GetByIdAsync(int id);
+		Task UpdateAsync(Dish dish);
 	}
 }

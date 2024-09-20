@@ -34,9 +34,9 @@ public class ReservationsController : Controller
 		{
 			if (_timeSlots.Contains(model.TimeSlot))
 			{
-				// send to api
-
 				var time = model.FormattedDateTime;
+
+				// impment my api call later
 
 
 				return View("Success", model);
