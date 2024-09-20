@@ -66,7 +66,7 @@ public class DishesController/*(IDishesService dishesService)*/ : Controller
 	public IActionResult Delete(int id)
 	{
 		DishesService.Delete(id);
-		return RedirectToAction(nameof(Index));
+		return RedirectToAction("Index", "Home");
 	}
 
 

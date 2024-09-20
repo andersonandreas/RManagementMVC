@@ -1,0 +1,17 @@
+﻿@model CreateReservation
+
+
+<div class="container mt-5">
+	<h1 class="mb-4">Reservation Confirmed</h1>
+	<dl class="row">
+		<dt class="col-sm-3">Date and Time:</dt>
+		<dd class="col-sm-9">@Model.FormattedDateTime</dd>
+		<dt class="col-sm-3">Name:</dt>
+		<dd class="col-sm-9">@Model.Name</dd>
+		<dt class="col-sm-3">Email:</dt>
+		<dd class="col-sm-9">@(Model.Email ?? "Not provided")</dd>
+		<dt class="col-sm-3">Number of People:</dt>
+		<dd class="col-sm-9">@Model.Quantity</dd>
+	</dl>
+	<a asp-action="Index" class="btn btn-primary">Make Another Reservation</a>
+</div>

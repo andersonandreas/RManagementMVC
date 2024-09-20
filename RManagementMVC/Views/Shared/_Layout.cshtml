@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using RManagementMVC.Services.Auth
+
+@inject AdminStateService AdminState
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -10,25 +16,38 @@
 	<link rel="stylesheet" href="~/RManagementMVC.styles.css" asp-append-version="true" />
 </head>
 <body class="d-flex flex-column min-vh-100 m-0">
+
 	<header>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Huvudnavigering">
 			<div class="container">
-				<a class="navbar-brand" asp-controller="Home" asp-action="Index" >Restaurang Andreas MVC</a>
+				<a class="navbar-brand" asp-controller="Home" asp-action="Index">Restaurang Andreas MVC</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Visa/dölj meny">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<ul class="navbar-nav ms-auto">
-						<li class="nav-item">
-							<a class="nav-link">About us</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" asp-controller="Dishes" asp-action="Index">Menu</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#boka">Book</a>
-						</li>
 
+						@if (AdminState.IsAdminLoggedIn())
+						{
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Admin" asp-action="Panel">Admin Panel</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a class="nav-link">About us</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Dishes" asp-action="Index">Menu</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" asp-controller="Reservations">Reservation</a>
+							</li>
+						}
 					</ul>
 				</div>
 			</div>
@@ -72,7 +91,7 @@
 				<div class="col-12 text-center">
 					<small class="text-muted">
 						© 2024 Restaurang Andreas MVC.
-						<a asp-controller="Account" asp-action="Login"  class="text-muted ms-2 text-decoration-none aria-label="Admin login panel" >
+						<a asp-controller="Account" asp-action="Login" class="text-muted ms-2 text-decoration-none aria-label="Admin login panel">
 							Admin
 						</a>
 					</small>
