@@ -18,6 +18,9 @@ public class AdminController(
 
 	public async Task<IActionResult> Panel()
 	{
+
+		await _dishesService.GetAllAsync();
+
 		if (!_authService.IsAuthenticated() || !_authService.IsAdmin())
 		{
 			return RedirectToAction("Login", "Account");
@@ -36,15 +39,6 @@ public class AdminController(
 
 		return View(viewModel);
 	}
-
-
-
-
-
-
-
-
-
 
 
 }

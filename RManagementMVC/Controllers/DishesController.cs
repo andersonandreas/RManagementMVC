@@ -33,47 +33,45 @@ public class DishesController(IDishesService dishesService) : Controller
 
 
 	[HttpPost]
-	public IActionResult Edit(Dish dish)
+	public async Task<IActionResult> Edit(Dish dish)
 	{
 		if (ModelState.IsValid)
 		{
-			_dishesService.UpdateAsync(dish);
-			return RedirectToAction(nameof(Index));
+			await _dishesService.UpdateAsync(dish);
+			return RedirectToAction("Panel", "Admin");
 		}
 
 		return View(dish);
 	}
 
 
+	public IActionResult Delete(int id)
+	{
+		_dishesService.DeleteAsync(id);
+		return RedirectToAction("Panel", "Admin");
+	}
 
 
-	//public IActionResult Create()
-	//{
-	//	ViewBag.Action = _createString;
+	public IActionResult Create()
+	{
+		ViewBag.Action = _createString;
 
-	//	return View();
-	//}
-
-
-	//[HttpPost]
-	//public IActionResult Create(Dish dish)
-	//{
-
-	//	if (ModelState.IsValid)
-	//	{
-	//		DishesService.Create(dish);
-	//		return RedirectToAction(nameof(Index));
-	//	}
-
-	//	return View(dish);
-	//}
+		return View();
+	}
 
 
-	//public IActionResult Delete(int id)
-	//{
-	//	DishesService.Delete(id);
-	//	return RedirectToAction("Index", "Home");
-	//}
+	[HttpPost]
+	public async Task<IActionResult> Create(CreateDish dish)
+	{
+
+		if (ModelState.IsValid)
+		{
+			await _dishesService.CreateAsync(dish);
+			return RedirectToAction("Panel", "Admin");
+		}
+
+		return View(dish);
+	}
 
 
 }
