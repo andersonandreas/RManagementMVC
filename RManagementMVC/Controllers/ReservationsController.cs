@@ -1,19 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RManagementMVC.Models;
+using RManagementMVC.Services.Restaurant.Interfaces;
 
 namespace RManagementMVC.Controllers;
 
-public class ReservationsController : Controller
+public class ReservationsController(IReservationService reservationService) : Controller
 {
+
+
+	private const string _createString = "create";
+	private const string _editString = "edit";
 
 
 
 	// if i have time take the opoens times from the restaurant isntead with an api call.... 
 	private static readonly List<string> _timeSlots =
 	[
-		"17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
-		"20:00", "20:30", "21:00", "21:30", "22:00"
+		"17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00"
 	];
 
 
@@ -23,23 +27,67 @@ public class ReservationsController : Controller
 			.Select(t => new SelectListItem { Value = t, Text = t })
 			.ToList();
 
-		return View(new CreateReservation { Date = DateTime.Today });
+		return View(new CreateReservation { At = DateTime.Today.ToString() });
+	}
+
+
+	public async Task<IActionResult> Edit(Guid id)
+	{
+		ViewBag.Action = _editString;
+
+		var reservation = await reservationService.GetByIdAsync(id);
+
+		return View(reservation);
 	}
 
 
 	[HttpPost]
-	public IActionResult SubmitReservation(CreateReservation model)
+	public async Task<IActionResult> Edit(Reservation reservation)
+	{
+		if (ModelState.IsValid)
+		{
+			await reservationService.UpdateAsync(reservation);
+			return RedirectToAction("Panel", "Admin");
+		}
+
+		return View(reservation);
+	}
+
+
+	public IActionResult Delete(Guid id)
+	{
+		reservationService.DeleteAsync(id);
+		return RedirectToAction("Panel", "Admin");
+	}
+
+
+	public IActionResult Create()
+	{
+		ViewBag.Action = _createString;
+
+		return View();
+	}
+
+
+	[HttpPost]
+	public async Task<IActionResult> Create(CreateReservation model)
 	{
 		if (ModelState.IsValid)
 		{
 			if (_timeSlots.Contains(model.TimeSlot))
 			{
-				var time = model.FormattedDateTime;
 
-				// impment my api call later
+				var at = model.FormattedDateTime;
+				model.At = at;
+
+				var result = await reservationService.CreateAsync(model);
+
+				if (result)
+				{
+					return View("Success", model);
+				}
 
 
-				return View("Success", model);
 			}
 			else
 			{

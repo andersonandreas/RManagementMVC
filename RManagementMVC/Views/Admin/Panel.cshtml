@@ -4,11 +4,11 @@
 }
 
 
-<h1 class="text-center mt-2">Admin Panel</h1>
+<h2 class="text-center mt-4">Admin Panel</h2>
 
 <section>
 
-	<h2>Reservations</h2>
+	<h3>Reservations</h3>
 
 	@if (Model?.Reservations?.Any() == true)
 	{
@@ -50,12 +50,12 @@
 			</tbody>
 		</table>
 
-		<a asp-controller="Dishes" asp-action="Create" class="btn btn-primary">Add New Reservation</a>
+		<a asp-controller="Reservations" asp-action="Create" class="btn btn-primary">Add New Reservation</a>
 	}
 	else
 	{
 		<p>No reservations at this time</p>
-		<a asp-controller="Dishes" asp-action="Create" class="btn btn-primary">Add New Reservation</a>
+		<a asp-controller="Reservations" asp-action="Create" class="btn btn-primary">Add New Reservation</a>
 
 	}
 </section>
@@ -64,7 +64,7 @@
 
 <section>
 
-	<h2>Dishes</h2>
+	<h3>Dishes</h3>
 
 	@if (Model?.Dishes?.Any() == true)
 	{

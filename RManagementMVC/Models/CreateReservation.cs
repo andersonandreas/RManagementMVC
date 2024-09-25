@@ -5,9 +5,8 @@ namespace RManagementMVC.Models;
 public class CreateReservation
 {
 	[Required]
-	[Display(Name = "Date")]
-	[DataType(DataType.Date)]
-	public DateTime Date { get; set; }
+	[Display(Name = "At")]
+	public string At { get; set; } = default!;
 
 	[Required]
 	[Display(Name = "Time")]
@@ -26,5 +25,5 @@ public class CreateReservation
 	[Display(Name = "Number of People")]
 	public int Quantity { get; set; }
 
-	public string FormattedDateTime => $"{Date:yyyy-MM-dd} {TimeSlot}";
+	public string FormattedDateTime => $"{At:yyyy-MM-dd} {TimeSlot}";
 }

@@ -2,7 +2,7 @@
 
 namespace RManagementMVC.Services.Restaurant.Interfaces;
 
-public static class ReservationService
+public static class TestReservationService
 {
 
     private static IList<Reservation> _reservations = [
