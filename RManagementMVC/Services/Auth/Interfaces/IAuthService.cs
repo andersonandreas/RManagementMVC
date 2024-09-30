@@ -1,13 +1,11 @@
-﻿using RManagementMVC.Models.ViewModels;
+﻿using RManagementMVC.DTOs;
+using RManagementMVC.Models.ViewModels;
 
 namespace RManagementMVC.Services.Auth.Interfaces
 {
     public interface IAuthService
     {
-        bool EnsureValidToken();
-        bool IsAdmin();
-        bool IsAuthenticated();
-        Task<bool> LoginAsync(LoginViewModel loginViewModel);
-        void Logout();
+        Task<ApiLoginResult> LoginAsync(LoginViewModel loginViewModel);
+        Task LogoutAsync();
     }
 }

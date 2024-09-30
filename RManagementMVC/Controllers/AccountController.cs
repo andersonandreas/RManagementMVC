@@ -11,40 +11,40 @@ public class AccountController(IAuthService authService) : Controller
 
 
 
+
 	public IActionResult Login()
 	{
-		if (_authService.IsAuthenticated() && _authService.IsAdmin())
-		{
-			return RedirectToAction("Panel", "Admin");
-		}
-
 		return View();
 	}
 
 
 	[HttpPost]
-	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Login(LoginViewModel loginViewModel)
 	{
-		if (ModelState.IsValid)
-		{
-			var result = await _authService.LoginAsync(loginViewModel);
-			if (result && _authService.IsAdmin())
-			{
-				return RedirectToAction("Panel", "Admin");
-			}
 
-			ModelState.AddModelError(string.Empty, "Invalid login attempt or not an admin.");
+		if (!ModelState.IsValid)
+		{
+			return View(loginViewModel);
 		}
+
+		var result = await _authService.LoginAsync(loginViewModel);
+
+		if (result.Success)
+		{
+			return RedirectToAction("Panel", "Admin");
+		}
+
+		ModelState.AddModelError(string.Empty, result.Message ?? "Invalid login attempt");
 
 		return View(loginViewModel);
 	}
 
 
-	public IActionResult Logout()
+	public async Task<IActionResult> Logout()
 	{
-		_authService.Logout();
-		return RedirectToAction("Index", "Home");
+		await _authService.LogoutAsync();
+
+		return View(nameof(Login));
 	}
 
 

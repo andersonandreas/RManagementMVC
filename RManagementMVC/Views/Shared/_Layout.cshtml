@@ -1,6 +1,8 @@
 ﻿@using RManagementMVC.Services.Auth
+@using RManagementMVC.Services.Auth.Interfaces
 
-@inject AdminStateService AdminState
+@inject IUserService UserService
+
 
 
 
@@ -25,7 +27,7 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<ul class="navbar-nav ms-auto">
-						@if (AdminState.IsAdminLoggedIn())
+						@if (UserService.IsAdminLoggedIn())
 						{
 							<li class="nav-item">
 								<a class="nav-link" asp-controller="Admin" asp-action="Panel">Admin Panel</a>
