@@ -1,208 +1,160 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using RManagementMVC.Models;
 using RManagementMVC.Services.Restaurant.Interfaces;
 
 namespace RManagementMVC.Controllers;
 
-public class ReservationsController(IReservationService reservationService) : Controller
+
+public class ReservationsController(
+    IReservationService reservationService,
+    IConfiguration configuration) : Controller
 {
 
+    private readonly IReservationService _reservationService = reservationService;
+    private readonly IConfiguration _configuration = configuration;
+    private const string _createString = "Create";
+    private const string _editString = "Edit";
 
-	private const string _createString = "create";
-	private const string _editString = "edit";
 
 
+    public IActionResult Create()
+    {
+        SetupViewBag(_createString);
 
-	// if i have time take the opoens times from the restaurant isntead with an api call.... 
-	private static readonly List<string> _timeSlots =
-	[
-		"17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00"
-	];
+        return View("_Reservation", new ReservationViewModel
+        {
+            At = DateTime.Today.ToString("yyyy-MM-dd")
+        });
+    }
 
 
-	public IActionResult Index()
-	{
-		ViewBag.TimeSlots = _timeSlots
-			.Select(t => new SelectListItem { Value = t, Text = t })
-			.ToList();
+    [HttpPost]
+    public async Task<IActionResult> Create(ReservationViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var reservation = CreateReservationModel(model);
+            var result = await _reservationService.CreateAsync(reservation);
 
-		return View(new CreateReservation { At = DateTime.Today.ToString() });
-	}
+            if (result)
+            {
+                return RedirectToAction(nameof(Success));
+            }
 
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the reservation.");
+        }
 
-	public async Task<IActionResult> Edit(Guid id)
-	{
-		ViewBag.Action = _editString;
+        SetupViewBag(_createString);
 
-		var reservation = await reservationService.GetByIdAsync(id);
+        return View("_Reservation", model);
+    }
 
-		return View(reservation);
-	}
 
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        SetupViewBag(_editString);
+        var reservation = await _reservationService.GetByIdAsync(id);
 
-	[HttpPost]
-	public async Task<IActionResult> Edit(Reservation reservation)
-	{
-		if (ModelState.IsValid)
-		{
-			await reservationService.UpdateAsync(reservation);
-			return RedirectToAction("Panel", "Admin");
-		}
+        if (reservation == null)
+        {
+            return NotFound();
+        }
 
-		return View(reservation);
-	}
+        var model = CreateReservationViewModel(reservation);
 
+        return View("_Reservation", model);
+    }
 
-	public IActionResult Delete(Guid id)
-	{
-		reservationService.DeleteAsync(id);
-		return RedirectToAction("Panel", "Admin");
-	}
 
+    [HttpPost]
+    public async Task<IActionResult> Edit(ReservationViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var reservation = UpdateReservationModel(model);
+            var result = await _reservationService.UpdateAsync(reservation);
 
-	public IActionResult Create()
-	{
-		ViewBag.Action = _createString;
+            if (result)
+            {
+                return RedirectToAction("Panel", "Admin");
+            }
 
-		return View();
-	}
+            ModelState.AddModelError(string.Empty, "An error occurred while updating the reservation.");
+        }
 
+        SetupViewBag(_editString);
 
-	[HttpPost]
-	public async Task<IActionResult> Create(CreateReservation model)
-	{
-		if (ModelState.IsValid)
-		{
-			if (_timeSlots.Contains(model.TimeSlot))
-			{
+        return View("_Reservation", model);
+    }
 
-				var at = model.FormattedDateTime;
-				model.At = at;
 
-				var result = await reservationService.CreateAsync(model);
+    public IActionResult Delete(Guid id)
+    {
+        _reservationService.DeleteAsync(id);
+        return RedirectToAction("Panel", "Admin");
+    }
 
-				if (result)
-				{
-					return View("Success", model);
-				}
 
+    public IActionResult Success()
+    {
+        return View();
+    }
 
-			}
-			else
-			{
-				ModelState.AddModelError("TimeSlot", "Invalid time slot selected");
-			}
-		}
 
-		ViewBag.TimeSlots = _timeSlots
-			.Select(t => new SelectListItem { Value = t, Text = t })
-			.ToList();
 
 
-		return View("Index", model);
-	}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//private const string _createString = "create";
-	//private const string _editString = "edit";
-
-
-	//public IActionResult Index()
-	//{
-	//	var reservations = ReservationService.GetAll();
-	//	return View(reservations);
-	//}
-
-
-	//public IActionResult Edit(string id)
-	//{
-	//	ViewBag.Action = _editString;
-
-	//	var reservation = ReservationService.GetByID(Guid.Parse(id));
-	//	return View(reservation);
-	//}
-
-
-	//[HttpPost]
-	//public IActionResult Edit(Reservation reservation)
-	//{
-
-	//	if (ModelState.IsValid)
-	//	{
-	//		ReservationService.UpdateReservation(reservation);
-	//		return RedirectToAction(nameof(Index));
-	//	}
-
-	//	return View(reservation);
-	//}
-
-
-	//public IActionResult Create()
-	//{
-	//	ViewBag.Action = _createString;
-
-	//	return View();
-	//}
-
-
-	//[HttpPost]
-	//public IActionResult Create(Reservation reservation)
-	//{
-	//	ViewBag.Action = _createString;
-
-	//	if (ModelState.IsValid)
-	//	{
-	//		ReservationService.Create(reservation);
-	//		return RedirectToAction(nameof(Index));
-	//	}
-
-	//	return View(reservation);
-	//}
-
-
-	//public IActionResult Delete(string id)
-	//{
-	//	ReservationService.Delete(Guid.Parse(id));
-	//	return RedirectToAction(nameof(Index));
-	//}
-
-
+    private static Reservation CreateReservationModel(ReservationViewModel model)
+    {
+        return new Reservation
+        {
+            At = model.FormattedDateTime,
+            Name = model.Name,
+            Email = model.Email,
+            Quantity = model.Quantity
+        };
+    }
+
+
+    private static Reservation UpdateReservationModel(ReservationViewModel model)
+    {
+        if (model.Id == null)
+        {
+            throw new ArgumentNullException(nameof(model.Id), "Id can't be empty");
+        }
+
+        return new Reservation
+        {
+            Id = model.Id.Value,
+            At = model.FormattedDateTime,
+            Name = model.Name,
+            Email = model.Email,
+            Quantity = model.Quantity
+        };
+    }
+
+
+    private static ReservationViewModel CreateReservationViewModel(Reservation reservation)
+    {
+        var reservationDateTime = DateTime.Parse(reservation.At);
+
+        return new ReservationViewModel
+        {
+            Id = reservation.Id,
+            At = reservationDateTime.ToString("yyyy-MM-dd"),
+            TimeSlot = reservationDateTime.ToString("HH:mm"),
+            Name = reservation.Name,
+            Email = reservation.Email,
+            Quantity = reservation.Quantity
+        };
+    }
+
+
+    private void SetupViewBag(string action)
+    {
+        ViewBag.Action = action;
+        ViewBag.MaxTableQuantity = _configuration.GetValue<int>("RestaurantOptions:MaxTableQuantity");
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

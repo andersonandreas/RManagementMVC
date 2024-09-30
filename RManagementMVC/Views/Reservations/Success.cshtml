@@ -1,17 +1,21 @@
-﻿@model CreateReservation
-
+﻿@{
+    ViewData["Title"] = "Reservation Successful";
+}
 
 <div class="container mt-5">
-	<h1 class="mb-4">Reservation Confirmed</h1>
-	<dl class="row">
-		<dt class="col-sm-3">Date and Time:</dt>
-		<dd class="col-sm-9">@Model.FormattedDateTime</dd>
-		<dt class="col-sm-3">Name:</dt>
-		<dd class="col-sm-9">@Model.Name</dd>
-		<dt class="col-sm-3">Email:</dt>
-		<dd class="col-sm-9">@(Model.Email ?? "Not provided")</dd>
-		<dt class="col-sm-3">Number of People:</dt>
-		<dd class="col-sm-9">@Model.Quantity</dd>
-	</dl>
-	<a asp-action="Index" class="btn btn-primary">Make Another Reservation</a>
+    <article class="row justify-content-center">
+        <section class="col-md-8">
+            <div class="card">
+                <header class="card-header">
+                    <h1 class="card-title text-center mb-0">Reservation Successful!</h1>
+                </header>
+                <div class="card-body text-center">
+                    <p class="card-text">Thank you for your reservation. We look forward to seeing you!</p>
+                    <nav class="mt-3">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Return to Home</a>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    </article>
 </div>

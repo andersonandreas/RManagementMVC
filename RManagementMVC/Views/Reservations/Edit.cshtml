@@ -1,43 +1,16 @@
-﻿@model Reservation
-
-@{
-	var action = ViewBag.Action ?? string.Empty;
-}
+﻿@model ReservationViewModel
 
 
 @if (Model != null)
 {
+	<h3 class="mb-3 mt-3">Editing: @Model.Id</h3>
 
-	<div class="container mt-4 mb-2">
-		<h3 class="mb-3">Editing reservation with ID: @Model.Id</h3>
-		<form method="post" asp-controller="Reservations" asp-action="@action" >
-			<div asp-validation-summary="All" class="text-danger"></div>
-			<div class="row g-3">
-				<div class="col-md-6">
-					<label asp-for="Name" class="form-label"></label>
-					<input asp-for="Name" class="form-control" />
-					<span asp-validation-for="Name" class="text-danger"></span>
-				</div>
-
-				<div class="col-md-6">
-					<label asp-for="Email" class="form-label"></label>
-					<input asp-for="Email" class="form-control" />
-					<span asp-validation-for="Email" class="text-danger"></span>
-				</div>
-
-			</div>
-			<div class="mt-3">
-				<button type="submit" class="btn btn-primary">Update</button>
-				<a asp-controller="Admin" asp-action="Panel" class="btn btn-secondary">Cancel</a>
-			</div>
-
-			@if (action == "edit")
-			{
-				<input asp-for="Id" type="hidden" />
-			}
-		</form>
-	</div>
-
+	<partial name="_Reservation" model="Model" />
+}
+else
+{
+	<h1>No reservations to show</h1>
+}
 
 }
 

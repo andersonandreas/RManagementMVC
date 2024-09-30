@@ -42,12 +42,12 @@ public class ReservationService(
     }
 
 
-    public async Task<bool> CreateAsync(CreateReservation createReservation)
+    public async Task<bool> CreateAsync(Reservation reservation)
     {
         var restaurantId = _options.RestaurantId;
 
         var client = _httpClientFactory.CreateClient("RestaurantApiClient");
-        var response = await client.PostAsJsonAsync($"api/restaurants/{restaurantId}/reservations", createReservation);
+        var response = await client.PostAsJsonAsync($"api/restaurants/{restaurantId}/reservations", reservation);
 
         if (response.IsSuccessStatusCode)
         {
