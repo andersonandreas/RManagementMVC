@@ -4,7 +4,7 @@ using RManagementMVC.Services.Auth.Interfaces;
 
 namespace RManagementMVC.Controllers;
 
-public class AccountController(IAuthService authService) : Controller
+public class AccountController(IAuthService authService, IUserService userService) : Controller
 {
 
 	private readonly IAuthService _authService = authService;
@@ -14,6 +14,11 @@ public class AccountController(IAuthService authService) : Controller
 
 	public IActionResult Login()
 	{
+		if (userService.IsAdminLoggedIn())
+		{
+			return RedirectToAction("Panel", "Admin");
+		}
+
 		return View();
 	}
 

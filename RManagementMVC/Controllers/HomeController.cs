@@ -3,15 +3,24 @@ using RManagementMVC.Services.Restaurant.Interfaces;
 
 namespace RManagementMVC.Controllers;
 
-public class HomeController(ILogger<HomeController> logger, IRestaurantService restaurantService) : Controller
+public class HomeController(ILogger<HomeController> logger, IRestaurantService restaurantService, IDishesService dishesService) : Controller
 {
-	private readonly ILogger<HomeController> _logger = logger;
+    private readonly ILogger<HomeController> _logger = logger;
 
-	public IActionResult Index()
-	{
-		var restaurant = restaurantService.GetAll();
-		return View(restaurant);
-	}
 
+
+
+    public async Task<IActionResult> Index()
+    {
+        var topDishes = await dishesService.GetAllAsync();
+        return View(topDishes.ToList());
+    }
+
+
+    public IActionResult AboutUs()
+    {
+        return View();
+
+    }
 
 }

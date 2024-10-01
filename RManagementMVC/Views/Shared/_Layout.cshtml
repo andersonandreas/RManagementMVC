@@ -1,104 +1,106 @@
 ﻿@using RManagementMVC.Services.Auth
 @using RManagementMVC.Services.Auth.Interfaces
-
 @inject IUserService UserService
 
-
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="description" content="Restaurant Andreas MVC offers a modern dining experience focusing on local ingredients and innovative cooking in Stockholm.">
-	<title>@ViewData["Title"] - Restaurant MVC</title>
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/RManagementMVC.styles.css" asp-append-version="true" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Byte & Bite offers a modern dining experience focusing on local ingredients and innovative cooking in Stockholm.">
+    <title>Byte & Bite</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RManagementMVC.styles.css" asp-append-version="true" />
 </head>
-<body class="d-flex flex-column min-vh-100 m-0">
-	<header>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Main navigation">
-			<div class="container">
-				<a class="navbar-brand" asp-controller="Home" asp-action="Index">Restaurant Andreas MVC</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Show/hide menu">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNav">
-					<ul class="navbar-nav ms-auto">
-						@if (UserService.IsAdminLoggedIn())
-						{
-							<li class="nav-item">
-								<a class="nav-link" asp-controller="Admin" asp-action="Panel">Admin Panel</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
-							</li>
-						}
-						else
-						{
-							<li class="nav-item">
-								<a class="nav-link">About us</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" asp-controller="Dishes" asp-action="Index">Menu</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" asp-controller="Reservations"  asp-action="Create" >Book a Table</a>
-							</li>
-						}
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
-	<footer class="bg-dark text-light py-4 mt-auto">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4 mb-3 mb-md-0">
-					<h2 class="h5">Contact Info</h2>
-					<address>
-						Tel: <a href="tel:+4681234567" class="text-light">08-123 45 67</a><br>
-						E-mail: <a href="mailto:info@andreasmvc.se" class="text-light">info@andreasmvc.se</a>
-					</address>
-				</div>
-				<div class="col-md-4 mb-3 mb-md-0">
-					<h2 class="h5">Address</h2>
-					<address>
-						Storgatan 1<br>
-						123 45 Stockholm
-					</address>
-				</div>
-				<div class="col-md-4">
-					<h2 class="h5">Opening Hours</h2>
-					<ul class="list-unstyled">
-						<li>Tue-Sat: 17:00 - 23:00</li>
-						<li>Sun-Mon: Closed</li>
-					</ul>
-				</div>
-			</div>
-			<hr class="mt-4 mb-3 border-secondary">
-			<div class="row">
-				<div class="col-12 text-center">
-					<small class="text-muted">
-						© 2024 Restaurant Andreas MVC.
-						<a asp-controller="Account" asp-action="Login" class="text-muted ms-2 text-decoration-none aria-label="Admin login panel">
-							Admin
-						</a>
-					</small>
-				</div>
-			</div>
-		</div>
-	</footer>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
-	@await RenderSectionAsync("Scripts", required: false)
+<body class="d-flex flex-column h-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Main navigation">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Byte & Bite</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        @if (UserService.IsAdminLoggedIn())
+
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Admin" asp-action="Panel">Admin Panel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+
+                        else
+
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Dishes" asp-action="Index">Menu</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Reservations" asp-action="Create">Book a Table</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow-1">
+        <div class="container py-4">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h2 class="h5">Contact Info</h2>
+                    <address>
+                        Tel: <a href="tel:+4681234567" class="text-light">08-123 45 67</a><br>
+                        Email: <a href="mailto:info@andreasmvc.se" class="text-light">info@andreasmvc.se</a>
+                    </address>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h2 class="h5">Address</h2>
+                    <address>
+                        Storgatan 1<br>
+                        123 45 Stockholm
+                    </address>
+                </div>
+                <div class="col-md-4">
+                    <h2 class="h5">Opening Hours</h2>
+                    <ul class="list-unstyled">
+                        <li>Tue-Sat: 17:00 - 23:00</li>
+                        <li>Sun-Mon: Closed</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <small>
+                        <p>&copy; 2024 Byte & Bite. All rights reserved.</p>
+                        <a asp-controller="Account" asp-action="Login" class="text-muted text-decoration-none" aria-label="Admin login">
+                            Admin
+                        </a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,1 +1,61 @@
-﻿<section class="py-5 bg-white"> <div class="container"> <div class="row align-items-center"> <div class="col-lg-6 mb-2"> <h1 class="display-4 fw-bold mb-3 text-dark">Welcome to Andreas MVC</h1> <p class="lead mb-4 text-secondary">Discover our modern interpretation of classic flavors in a relaxed yet sophisticated environment.</p> <a href="#boka" class="btn btn-primary btn-lg px-4">Reserve table</a> </div> <div class="col-lg-6"> <img src="/Images/Interior.jpg" alt="Restaurant Andreas MVC interior" class="img-fluid rounded shadow" width="600" height="400"> </div> </div> </div> </section> <section class="py-5 bg-light"> <div class="container"> <h2 class="text-center mb-4 text-dark">Our philosophy</h2> <div class="row justify-content-center"> <div class="col-md-8"> <p class="text-center text-secondary">We believe in creating memorable meals by combining high-quality, local ingredients with innovative cooking methods. Our passion for food and service permeates every aspect of your experience with us.</p> </div> </div> </div> </section> <section class="py-5 bg-white"> <div class="container"> <h2 class="text-center mb-5 text-dark"></h2> <div class="row g-4"> <article class="col-md-4"> <div class="card h-100 border-0 shadow-sm"> <img src="/Images/dishImage.jpg" class="card-img-top" alt="Lobster Bisque" width="400" height="300"> <div class="card-body"> <h3 class="card-title h5 text-primary">Lobster Bisque</h3> <p class="card-text text-secondary">Creamy lobster soup with cognac and fresh herbs.</p> <p class="card-text fw-bold text-dark">195 kr</p> </div> </div> </article> <article class="col-md-4"> <div class="card h-100 border-0 shadow-sm"> <img src="/Images/dishImage.jpg" class="card-img-top" alt="Seared Cod Loin" width="400" height="300"> <div class="card-body"> <h3 class="card-title h5 text-primary">Seared Cod Loin</h3> <p class="card-text text-secondary">With potato purée, seasonal vegetables, and white wine sauce.</p> <p class="card-text fw-bold text-dark">285 kr</p> </div> </div> </article> <article class="col-md-4"> <div class="card h-100 border-0 shadow-sm"> <img src="/Images/dishImage.jpg" class="card-img-top" alt="Crème Brûlée" width="400" height="300"> <div class="card-body"> <h3 class="card-title h5 text-primary">Crème Brûlée</h3> <p class="card-text text-secondary">Classic French dessert with Tahitian vanilla and fresh berries.</p> <p class="card-text fw-bold text-dark">110 kr</p> </div> </div> </article> </div> <div class="text-center mt-5"> <a asp-controller="Dishes" asp-action="Index" class="btn btn-outline-primary">Explore full menu</a> </div> </div> </section> <section class="py-5 bg-light mb-3"> <div class="container"> <div class="row justify-content-center"> <div class="col-md-8 text-center"> <h2 class="mb-4 text-dark">Reserve your table</h2> <p class="mb-4 text-secondary">Let us take care of the details for your next memorable meal.</p> <a href="#" class="btn btn-primary btn-lg px-4">Book now</a> </div> </div> </div> </section>
+﻿@model List<Dish>
+
+<section class="hero py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3">From Code to Cuisine</h1>
+                <p class="lead mb-4">Discover how a team of .NET developers transformed their passion for coding into culinary artistry at Byte & Bite.</p>
+                <a href="#our-story" class="btn btn-primary btn-lg px-4">Our Story</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="/Images/Restaurantowners.jpg" alt="Byte & Bite team" class="img-fluid rounded shadow-lg" width="600" height="400">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="our-story" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Our Mission</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h3 class="text-center mb-3">Health-Driven Innovation</h3>
+                <p class="text-center">At Byte & Bite, we apply the precision and creativity of software development to the art of cooking. Our goal is to create healthy, innovative dishes that not only nourish the body but also delight the senses. Each recipe is meticulously crafted, tested, and optimized – just like a well-written piece of code.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Signature Dishes</h2>
+        <div class="row g-4">
+            @foreach (var dish in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <article class="card h-100 border-0 shadow-sm">
+                        <img src="/Images/@(dish.Name).jpg" class="card-img-top" alt="Image of @dish.Name" width="400" height="300">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title h5 text-primary">@dish.Name</h3>
+                            <p class="card-text text-secondary flex-grow-1">@dish.Description</p>
+                            <p class="card-text fw-bold text-dark mt-2">@dish.Price.ToString("c")</p>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="cta py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="mb-4">Join Us for a Unique Dining Experience</h2>
+                <p class="mb-4">Experience the fusion of technology and gastronomy at Byte & Bite, where every meal is a commit to a healthier, more delicious world.</p>
+                <a asp-controller="Reservations" asp-action="Create" class="btn btn-primary btn-lg px-4">Reserve a Table</a>
+            </div>
+        </div>
+    </div>
+</section>
