@@ -17,6 +17,18 @@ public class ReservationsController(
 
 
 
+
+
+    [HttpGet]
+    public ActionResult RedirectToAngularClient()
+    {
+        var angularUrl = _configuration["AngularClient:AngularReservationUrl"]
+            ?? throw new ApplicationException("Missing the Angular Url in appsettings json");
+
+        return Redirect(angularUrl);
+    }
+
+
     public IActionResult Create()
     {
         SetupViewBag(_createString);
